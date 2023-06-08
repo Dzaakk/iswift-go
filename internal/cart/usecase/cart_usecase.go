@@ -12,10 +12,22 @@ type CartUseCase interface {
 	FindById(id int) (*entity.Cart, error)
 	Create(dto dto.CartRequestBody) (*entity.Cart, error)
 	Delete(id, userId int) error
+	DeleteByUserId(userId int) error
 }
 
 type CartUseCaseImpl struct {
 	repository repository.CartRepository
+}
+
+// DeleteByUserId implements CartUseCase.
+func (usecase *CartUseCaseImpl) DeleteByUserId(userId int) error {
+	err := usecase.repository.DeleteByUserId(userId)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Create implements CartUseCase.
