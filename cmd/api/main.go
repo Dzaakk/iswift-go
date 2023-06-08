@@ -5,6 +5,7 @@ import (
 	cart "iswift-go-project/internal/cart/injector"
 	discount "iswift-go-project/internal/discount/injector"
 	oauth "iswift-go-project/internal/oauth/injector"
+	order "iswift-go-project/internal/order/injector"
 	product "iswift-go-project/internal/product/injector"
 	productCategory "iswift-go-project/internal/product_category/injector"
 	profile "iswift-go-project/internal/profile/injector"
@@ -27,6 +28,7 @@ func main() {
 	product.InitializedService(db).Route(&r.RouterGroup)
 	cart.InitializedService(db).Route(&r.RouterGroup)
 	discount.InitializedService(db).Route(&r.RouterGroup)
+	order.InitializedService(db).Route(&r.RouterGroup)
 
 	r.Run()
 
