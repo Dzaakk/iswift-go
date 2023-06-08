@@ -20,7 +20,7 @@ type OrderRepositoryImpl struct {
 
 // Update implements OrderRepository.
 func (repository *OrderRepositoryImpl) Update(entity entity.Order) (*entity.Order, error) {
-	if err := repository.db.Create(&entity).Error; err != nil {
+	if err := repository.db.Save(&entity).Error; err != nil {
 		return nil, err
 	}
 
