@@ -12,10 +12,22 @@ type CartRepository interface {
 	FindById(id int) (*entity.Cart, error)
 	Create(entity entity.Cart) (*entity.Cart, error)
 	Delete(entity entity.Cart) error
+	DeleteByUserId(userId int) error
 }
 
 type CartRepositoryImpl struct {
 	db *gorm.DB
+}
+
+// DeleteByUserId implements CartRepository.
+func (repository *CartRepositoryImpl) DeleteByUserId(userId int) error {
+	var cart entity.Cart
+
+	if err := repository.db.Where("user_id = ", userId).Delete(&cart).Error; err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Create implements CartRepository.
@@ -47,7 +59,7 @@ func (repository *CartRepositoryImpl) FindById(id int) (*entity.Cart, error) {
 	return &cart, nil
 }
 
-// FindByUserID implements CartRepository.
+// FindByUserId implements CartRepository.
 func (repository *CartRepositoryImpl) FindByUserId(userId int, offset int, limit int) []entity.Cart {
 	var carts []entity.Cart
 
