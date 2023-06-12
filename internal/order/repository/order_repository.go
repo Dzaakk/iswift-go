@@ -9,6 +9,7 @@ import (
 
 type OrderRepository interface {
 	FindAll(offset, limit int) []entity.Order
+	FindOneByExternalId(externalId string) (*entity.Order, error)
 	FindById(id int) (*entity.Order, error)
 	Create(entity entity.Order) (*entity.Order, error)
 	Update(entity entity.Order) (*entity.Order, error)
@@ -16,6 +17,19 @@ type OrderRepository interface {
 
 type OrderRepositoryImpl struct {
 	db *gorm.DB
+}
+
+// FindOneByExternalId implements OrderRepository.
+func (repository *OrderRepositoryImpl) FindOneByExternalId(externalId string) (*entity.Order, error) {
+	var order entity.Order
+
+	if err := repository.db.
+		Preload("OrderDetails.Product").
+		Where("external_id = ?", externalId).First(&order).Error; err != nil {
+		return nil, err
+	}
+
+	return &order, nil
 }
 
 // Update implements OrderRepository.
