@@ -22,7 +22,9 @@ import (
 type OrderUseCase interface {
 	FindAll(offset, limit int) []entity.Order
 	FindById(id int) (*entity.Order, error)
+	FindByExternalId(externalId string) (*entity.Order, error)
 	Create(dto dto.OrderRequestBody) (*entity.Order, error)
+	Update(id int, dto dto.OrderRequestBody) (*entity.Order, error)
 }
 
 type OrderUseCaseImpl struct {
@@ -32,6 +34,30 @@ type OrderUseCaseImpl struct {
 	productUseCase     productUseCase.ProductUseCase
 	orderDetailUseCase orderDetailUseCase.OrderDetailUsecase
 	paymentUseCase     paymentUseCase.PaymentUseCase
+}
+
+// Update implements OrderUseCase.
+func (usecase *OrderUseCaseImpl) Update(id int, dto dto.OrderRequestBody) (*entity.Order, error) {
+	order, err := usecase.repository.FindById(id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	order.Status = dto.Status
+
+	updateOrder, err := usecase.repository.Update(*order)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return updateOrder, nil
+}
+
+// FindByExternalId implements OrderUseCase.
+func (usecase *OrderUseCaseImpl) FindByExternalId(externalId string) (*entity.Order, error) {
+	return usecase.repository.FindOneByExternalId(externalId)
 }
 
 // Create implements OrderUseCase.
