@@ -3,6 +3,7 @@ package main
 import (
 	admin "iswift-go-project/internal/admin/injector"
 	cart "iswift-go-project/internal/cart/injector"
+	classRoom "iswift-go-project/internal/class_room/injector"
 	discount "iswift-go-project/internal/discount/injector"
 	oauth "iswift-go-project/internal/oauth/injector"
 	order "iswift-go-project/internal/order/injector"
@@ -10,6 +11,7 @@ import (
 	productCategory "iswift-go-project/internal/product_category/injector"
 	profile "iswift-go-project/internal/profile/injector"
 	register "iswift-go-project/internal/register/injector"
+	webhook "iswift-go-project/internal/webhook/injector"
 	mysql "iswift-go-project/pkg/db/mysql"
 
 	"github.com/gin-gonic/gin"
@@ -29,6 +31,8 @@ func main() {
 	cart.InitializedService(db).Route(&r.RouterGroup)
 	discount.InitializedService(db).Route(&r.RouterGroup)
 	order.InitializedService(db).Route(&r.RouterGroup)
+	webhook.InitializedService(db).Route(&r.RouterGroup)
+	classRoom.InitializedService(db).Route(&r.RouterGroup)
 
 	r.Run()
 
