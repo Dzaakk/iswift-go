@@ -1,4 +1,4 @@
-package order_detail
+package class_room
 
 import (
 	"database/sql"
@@ -8,14 +8,13 @@ import (
 	"gorm.io/gorm"
 )
 
-type OrderDetail struct {
-	ID    int64 `json:"id"`
-	Price int64 `json:"price"`
-	// Order       *orderEntity.Order     `json:"order" gorm:"foreignKey:OrderID;references:ID"`
-	OrderID     int64                  `json:"order_id"`
-	Product     *productEntity.Product `json:"product" gorm:"foreignKey:ProductID;references:ID"`
+type ClassRoom struct {
+	ID          int64                  `json:"id"`
+	User        *userEntity.User       `json:"user" gorm:"foreginKey:UserID;references:ID"`
+	UserID      int64                  `json:"user_id"`
+	Product     *productEntity.Product `json:"product" gorm:"foreginKey:ProductID;references:ID"`
 	ProductID   int64                  `json:"product_id"`
-	CreatedByID int64                  `json:"created_by" gorm:"column:created_by"`
+	CreatedByID *int64                 `json:"created_by" gorm:"column:created_by"`
 	CreatedBy   *userEntity.User       `json:"-" gorm:"foreignKey:CreatedByID;references:ID"`
 	UpdatedByID *int64                 `json:"updated_by" gorm:"column:updated_by"`
 	UpdatedBy   *userEntity.User       `json:"-" gorm:"foreignKey:UpdatedByID;references:ID"`
