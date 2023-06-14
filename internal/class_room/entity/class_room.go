@@ -14,7 +14,7 @@ type ClassRoom struct {
 	UserID      int64                  `json:"user_id"`
 	Product     *productEntity.Product `json:"product" gorm:"foreginKey:ProductID;references:ID"`
 	ProductID   int64                  `json:"product_id"`
-	CreatedByID int64                  `json:"created_by" gorm:"column:created_by"`
+	CreatedByID *int64                 `json:"created_by" gorm:"column:created_by"`
 	CreatedBy   *userEntity.User       `json:"-" gorm:"foreignKey:CreatedByID;references:ID"`
 	UpdatedByID *int64                 `json:"updated_by" gorm:"column:updated_by"`
 	UpdatedBy   *userEntity.User       `json:"-" gorm:"foreignKey:UpdatedByID;references:ID"`
