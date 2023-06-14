@@ -6,6 +6,7 @@ import (
 	usecase "iswift-go-project/internal/order/usecase"
 	"iswift-go-project/pkg/utils"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,6 +25,7 @@ func (handler *OrderHandler) Route(r *gin.RouterGroup) {
 	orderHandler.Use(middleware.AuthJwt)
 	{
 		orderHandler.POST("/orders", handler.Create)
+		orderHandler.GET("/orders", handler.FindAllByUserId)
 	}
 }
 
@@ -47,6 +49,16 @@ func (handler *OrderHandler) Create(ctx *gin.Context) {
 		ctx.Abort()
 		return
 	}
+
+	ctx.JSON(http.StatusOK, utils.Response(http.StatusOK, "ok", data))
+}
+
+func (handler *OrderHandler) FindAllByUserId(ctx *gin.Context) {
+	offset, _ := strconv.Atoi(ctx.Param("offset"))
+	limit, _ := strconv.Atoi(ctx.Param("limit"))
+
+	user := utils.GetCurrentUser(ctx)
+	data := handler.usecase.FindAllByUserId(offset, limit, int(user.ID))
 
 	ctx.JSON(http.StatusOK, utils.Response(http.StatusOK, "ok", data))
 }

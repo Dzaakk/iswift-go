@@ -21,6 +21,7 @@ import (
 
 type OrderUseCase interface {
 	FindAll(offset, limit int) []entity.Order
+	FindAllByUserId(offset, limit, userId int) []entity.Order
 	FindById(id int) (*entity.Order, error)
 	FindByExternalId(externalId string) (*entity.Order, error)
 	Create(dto dto.OrderRequestBody) (*entity.Order, error)
@@ -34,6 +35,11 @@ type OrderUseCaseImpl struct {
 	productUseCase     productUseCase.ProductUseCase
 	orderDetailUseCase orderDetailUseCase.OrderDetailUsecase
 	paymentUseCase     paymentUseCase.PaymentUseCase
+}
+
+// FindAllByUserId implements OrderUseCase.
+func (usecase *OrderUseCaseImpl) FindAllByUserId(offset int, limit int, userId int) []entity.Order {
+	return usecase.repository.FindAllByUserId(offset, limit, userId)
 }
 
 // Update implements OrderUseCase.
