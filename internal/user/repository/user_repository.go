@@ -9,6 +9,7 @@ import (
 type UserRepository interface {
 	FindAll(offset, limit int) []entity.User
 	FindById(id int) (*entity.User, error)
+	Count() int
 	FindByEmail(email string) (*entity.User, error)
 	Create(entity entity.User) (*entity.User, error)
 	Update(entity entity.User) (*entity.User, error)
@@ -18,11 +19,22 @@ type UserRepositoryImpl struct {
 	db *gorm.DB
 }
 
-// FindByEmail implements UserRepository
-func (ur *UserRepositoryImpl) FindByEmail(email string) (*entity.User, error) {
+// Count implements UserRepository.
+func (repository *UserRepositoryImpl) Count() int {
 	var user entity.User
 
-	if err := ur.db.Where("email = ?", email).First(&user).Error; err != nil {
+	var totalUser int64
+
+	repository.db.Model(&user).Count(&totalUser)
+
+	return int(totalUser)
+}
+
+// FindByEmail implements UserRepository
+func (repository *UserRepositoryImpl) FindByEmail(email string) (*entity.User, error) {
+	var user entity.User
+
+	if err := repository.db.Where("email = ?", email).First(&user).Error; err != nil {
 		return nil, err
 	}
 
@@ -30,18 +42,18 @@ func (ur *UserRepositoryImpl) FindByEmail(email string) (*entity.User, error) {
 }
 
 // FindAll implements UserRepository
-func (ur *UserRepositoryImpl) FindAll(offset int, limit int) []entity.User {
+func (repository *UserRepositoryImpl) FindAll(offset int, limit int) []entity.User {
 	var users []entity.User
-	ur.db.Find(&users)
+	repository.db.Find(&users)
 
 	return users
 }
 
 // FindById implements UserRepository
-func (ur *UserRepositoryImpl) FindById(id int) (*entity.User, error) {
+func (repository *UserRepositoryImpl) FindById(id int) (*entity.User, error) {
 	var user entity.User
 
-	if err := ur.db.First(&user, id).Error; err != nil {
+	if err := repository.db.First(&user, id).Error; err != nil {
 		return nil, err
 	}
 
@@ -49,24 +61,24 @@ func (ur *UserRepositoryImpl) FindById(id int) (*entity.User, error) {
 }
 
 // Create implements UserRepository
-func (ur *UserRepositoryImpl) Create(entity entity.User) (*entity.User, error) {
-	if err := ur.db.Create(&entity).Error; err != nil {
+func (repository *UserRepositoryImpl) Create(entity entity.User) (*entity.User, error) {
+	if err := repository.db.Create(&entity).Error; err != nil {
 		return nil, err
 	}
 	return &entity, nil
 }
 
 // Update implements UserRepository
-func (ur *UserRepositoryImpl) Update(entity entity.User) (*entity.User, error) {
-	if err := ur.db.Save(&entity).Error; err != nil {
+func (repository *UserRepositoryImpl) Update(entity entity.User) (*entity.User, error) {
+	if err := repository.db.Save(&entity).Error; err != nil {
 		return nil, err
 	}
 	return &entity, nil
 }
 
 // Delete implements UserRepository
-func (ur *UserRepositoryImpl) Delete(entity entity.User) error {
-	if err := ur.db.Save(&entity).Error; err != nil {
+func (repository *UserRepositoryImpl) Delete(entity entity.User) error {
+	if err := repository.db.Save(&entity).Error; err != nil {
 		return err
 	}
 	return nil

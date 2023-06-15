@@ -17,11 +17,17 @@ type UserUseCase interface {
 	FindByEmail(email string) (*entity.User, error)
 	Create(userDto dto.UserRequestBody) (*entity.User, error)
 	Update(userDto dto.UserRequestBody) (*entity.User, error)
+	Count() int
 	Delete(id int) error
 }
 
 type UserUseCaseImpl struct {
 	repository repository.UserRepository
+}
+
+// Count implements UserUseCase.
+func (usecase *UserUseCaseImpl) Count() int {
+	return usecase.repository.Count()
 }
 
 // FindByEmail implements UserUseCase
