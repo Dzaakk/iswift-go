@@ -10,6 +10,7 @@ import (
 type ProductUseCase interface {
 	FindAll(offset, limit int) []entity.Product
 	FindById(id int) (*entity.Product, error)
+	Count() int
 	Create(dto dto.ProductRequestBody) (*entity.Product, error)
 	Update(id int, dto dto.ProductRequestBody) (*entity.Product, error)
 	Delete(id int) error
@@ -18,6 +19,11 @@ type ProductUseCase interface {
 type ProductUseCaseImpl struct {
 	repository repository.ProductRepository
 	fileUpload fileUpload.FileUpload
+}
+
+// Count implements ProductUseCase.
+func (usecase *ProductUseCaseImpl) Count() int {
+	return usecase.repository.Count()
 }
 
 // Create implements ProductUseCase.
