@@ -12,12 +12,24 @@ type OrderRepository interface {
 	FindAllByUserId(offset, limit, userId int) []entity.Order
 	FindOneByExternalId(externalId string) (*entity.Order, error)
 	FindById(id int) (*entity.Order, error)
+	Count() int
 	Create(entity entity.Order) (*entity.Order, error)
 	Update(entity entity.Order) (*entity.Order, error)
 }
 
 type OrderRepositoryImpl struct {
 	db *gorm.DB
+}
+
+// Count implements OrderRepository.
+func (repository *OrderRepositoryImpl) Count() int {
+	var order entity.Order
+
+	var totalOrder int64
+
+	repository.db.Model(&order).Count(&totalOrder)
+
+	return int(totalOrder)
 }
 
 // FindAllByUserId implements OrderRepository.

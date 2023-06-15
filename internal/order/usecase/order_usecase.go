@@ -24,6 +24,7 @@ type OrderUseCase interface {
 	FindAllByUserId(offset, limit, userId int) []entity.Order
 	FindById(id int) (*entity.Order, error)
 	FindByExternalId(externalId string) (*entity.Order, error)
+	Count() int
 	Create(dto dto.OrderRequestBody) (*entity.Order, error)
 	Update(id int, dto dto.OrderRequestBody) (*entity.Order, error)
 }
@@ -35,6 +36,11 @@ type OrderUseCaseImpl struct {
 	productUseCase     productUseCase.ProductUseCase
 	orderDetailUseCase orderDetailUseCase.OrderDetailUsecase
 	paymentUseCase     paymentUseCase.PaymentUseCase
+}
+
+// Count implements OrderUseCase.
+func (usecase *OrderUseCaseImpl) Count() int {
+	return usecase.repository.Count()
 }
 
 // FindAllByUserId implements OrderUseCase.
