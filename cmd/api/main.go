@@ -4,6 +4,7 @@ import (
 	admin "iswift-go-project/internal/admin/injector"
 	cart "iswift-go-project/internal/cart/injector"
 	classRoom "iswift-go-project/internal/class_room/injector"
+	dashboard "iswift-go-project/internal/dashboard/injector"
 	discount "iswift-go-project/internal/discount/injector"
 	oauth "iswift-go-project/internal/oauth/injector"
 	order "iswift-go-project/internal/order/injector"
@@ -33,6 +34,7 @@ func main() {
 	order.InitializedService(db).Route(&r.RouterGroup)
 	webhook.InitializedService(db).Route(&r.RouterGroup)
 	classRoom.InitializedService(db).Route(&r.RouterGroup)
+	dashboard.InitializedService(db).Route(&r.RouterGroup)
 
 	r.Run()
 
