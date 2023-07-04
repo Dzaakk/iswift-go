@@ -12,6 +12,7 @@ import (
 	productCategory "iswift-go-project/internal/product_category/injector"
 	profile "iswift-go-project/internal/profile/injector"
 	register "iswift-go-project/internal/register/injector"
+	user "iswift-go-project/internal/user/injector"
 	webhook "iswift-go-project/internal/webhook/injector"
 	mysql "iswift-go-project/pkg/db/mysql"
 
@@ -35,6 +36,7 @@ func main() {
 	webhook.InitializedService(db).Route(&r.RouterGroup)
 	classRoom.InitializedService(db).Route(&r.RouterGroup)
 	dashboard.InitializedService(db).Route(&r.RouterGroup)
+	user.InitializedService(db).Route(&r.RouterGroup)
 
 	r.Run()
 
