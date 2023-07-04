@@ -2,6 +2,7 @@ package user
 
 import (
 	entity "iswift-go-project/internal/user/entity"
+	"iswift-go-project/pkg/utils"
 
 	"gorm.io/gorm"
 )
@@ -44,7 +45,7 @@ func (repository *UserRepositoryImpl) FindByEmail(email string) (*entity.User, e
 // FindAll implements UserRepository
 func (repository *UserRepositoryImpl) FindAll(offset int, limit int) []entity.User {
 	var users []entity.User
-	repository.db.Find(&users)
+	repository.db.Scopes(utils.Paginate(offset, limit)).Find(&users)
 
 	return users
 }
