@@ -61,6 +61,10 @@ func (usecase *UserUseCaseImpl) Create(dto dto.UserRequestBody) (*entity.User, e
 		CodeVerified: utils.RandString(32),
 	}
 
+	if dto.CreatedBy != nil {
+		user.CreatedByID = *dto.CreatedBy
+	}
+
 	// Create data
 	dataUser, err := usecase.repository.Create(user)
 
@@ -127,6 +131,9 @@ func (usecase *UserUseCaseImpl) Update(id int, dto dto.UserRequestBody) (*entity
 		user.Password = string(hashedPassword)
 	}
 
+	if dto.UpdatedBy != nil {
+		user.UpdatedByID = dto.UpdatedBy
+	}
 	updateUser, err := usecase.repository.Update(*user)
 
 	if err != nil {

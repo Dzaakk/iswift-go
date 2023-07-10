@@ -79,7 +79,7 @@ func (repository *UserRepositoryImpl) Update(entity entity.User) (*entity.User, 
 
 // Delete implements UserRepository
 func (repository *UserRepositoryImpl) Delete(entity entity.User) error {
-	if err := repository.db.Save(&entity).Error; err != nil {
+	if err := repository.db.Delete(&entity).Error; err != nil {
 		return err
 	}
 	return nil
